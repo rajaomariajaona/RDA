@@ -3,23 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rda.packet.handler;
+package rda.network.threads;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rda.network.SocketHandler;
 import rda.packet.ImagePacket;
 import rda.packet.Packet;
+import rda.packet.handler.ImageObservable;
+import rda.packet.handler.PacketReceivedHandler;
 
 /**
  *
  * @author snowden
  */
-public class PacketReceivedHandler implements Runnable {
+public class HostPacketReceivedThread implements Runnable {
 
     private SocketHandler socketHandler;
 
-    public PacketReceivedHandler(SocketHandler socketHandler) {
+    public HostPacketReceivedThread(SocketHandler socketHandler) {
         this.socketHandler = socketHandler;
     }
 
@@ -27,15 +29,16 @@ public class PacketReceivedHandler implements Runnable {
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                Packet packet = this.socketHandler.receive();
+                Packet packet = (Packet) socketHandler.receive();
                 if (packet instanceof ImagePacket) {
                     ImagePacket ip = (ImagePacket) packet;
                     ImageObservable.getInstance().setImage(ip.getImage());
+                } else {
+                    System.out.println(new String(packet.getData()));
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(PacketReceivedHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }

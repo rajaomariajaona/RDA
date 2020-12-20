@@ -22,6 +22,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import rda.network.Guest;
+import rda.other.MouseAction;
+import rda.packet.MousePacket;
 import rda.packet.handler.ImageObservable;
 
 /**
@@ -35,12 +37,14 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private StackPane parent;
-    
+
     @FXML
     private AnchorPane imgContainer, homeContainer;
-    
+
     @FXML
     private TextField hostAddress;
+
+    boolean in = false;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -56,25 +60,35 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void handleMouseMove(MouseEvent t) {
-//        try {
-//            ImageView source = (ImageView) t.getSource();
-//            double x = t.getX();
-//            double maxX = source.getFitWidth();
-//            double y = t.getY();
-//            double maxY = t.getSceneY();
-//            Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-//            x = x * d.getWidth() / maxX;
-//            y = y * d.getHeight() / maxY;
-//            Robot r = new Robot();
-//            r.mouseMove(Double.valueOf(x).intValue(), Double.valueOf(y).intValue());
-//        } catch (AWTException ex) {
-//            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+    private void handleMouse(MouseEvent t) throws Exception {
+        if (t.getEventType().equals(MouseEvent.MOUSE_ENTERED)) {
+            in = true;
+        }
+        if (t.getEventType().equals(MouseEvent.MOUSE_EXITED)) {
+            in = false;
+        }
+        if (in) {
+            ImageView source = (ImageView) t.getSource();
+            double x = t.getX();
+            double maxX = source.getFitWidth();
+            double y = t.getY();
+            double maxY = t.getSceneY();
+            x = x / maxX;
+            y = y / maxY;
+            MousePacket p;
+            if (t.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
+                p = new MousePacket(x, y, MouseAction.PRESS);
+            } else if (t.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
+                p = new MousePacket(x, y, MouseAction.RELEASE);
+            } else if (t.getEventType().equals(MouseEvent.MOUSE_MOVED)) {
+                p = new MousePacket(x, y, MouseAction.MOVE);
+            }
+            
+        }
     }
-    
+
     @FXML
-    private void startAction(ActionEvent t) throws UnknownHostException{
+    private void startAction(ActionEvent t) throws UnknownHostException {
         imgContainer.toFront();
         new Thread(new Guest(InetAddress.getByName(hostAddress.getText()))).start();
     }

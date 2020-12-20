@@ -5,7 +5,7 @@
  */
 package rda.network;
 
-import java.io.ObjectInputStream;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -19,29 +19,49 @@ import rda.packet.handler.PacketReceivedHandler;
  *
  * @author snowden
  */
-public class Guest implements Runnable {
+public class Guest extends SocketHandler implements Runnable {
 
     private InetAddress hostAddress;
 
     public Guest(InetAddress hostAddress) {
         this.hostAddress = hostAddress;
     }
+    public static int i = 0;
 
     @Override
     public void run() {
-        try {   
-            while (true) {
-                try {
-                    Socket socket = new Socket(hostAddress, ENV.PORT);
-                    ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-                    Packet p = (Packet) ois.readObject();
-                    new Thread(new PacketReceivedHandler(p)).start();
-                } catch (Exception ex) {
-                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            Socket socket = new Socket(hostAddress, ENV.PORT);
+            initStream(socket);
+            Thread t = new Thread(new PacketReceivedHandler(this));
+            t.start();
+            Thread t2 = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        Packet p = new Packet();
+                        p.setData(Integer.toString(++i).getBytes());
+                        try {
+                            send(p);
+                            Thread.sleep(1000);
+                        } catch (IOException ex) {
+                            Logger.getLogger(Guest.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(Guest.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 }
-            }
+            });
+            t2.start();
+            t.join();
+            t2.join();
         } catch (Exception ex) {
             Logger.getLogger(Guest.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                closeStream();
+            } catch (IOException ex) {
+            }
         }
     }
 }
