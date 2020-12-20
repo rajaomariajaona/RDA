@@ -5,10 +5,8 @@
  */
 package rda.packet.handler;
 
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import rda.packet.ImagePacket;
 import rda.packet.Packet;
 

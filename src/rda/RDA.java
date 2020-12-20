@@ -5,13 +5,11 @@
  */
 package rda;
 
-import java.net.InetAddress;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import rda.network.Guest;
 import rda.network.Host;
 
 /**
@@ -35,8 +33,8 @@ public class RDA extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
+        new Thread(new Host()).start();
         launch(args);
-        
     }
 
 }

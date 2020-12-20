@@ -8,17 +8,20 @@ package rda;
 import java.awt.image.BufferedImage;
 import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import rda.network.Guest;
-import rda.network.Host;
 import rda.packet.handler.ImageObservable;
 
 /**
@@ -31,7 +34,13 @@ public class FXMLDocumentController implements Initializable {
     private ImageView imgView;
 
     @FXML
-    private AnchorPane parent;
+    private StackPane parent;
+    
+    @FXML
+    private AnchorPane imgContainer, homeContainer;
+    
+    @FXML
+    private TextField hostAddress;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -44,15 +53,6 @@ public class FXMLDocumentController implements Initializable {
                 imgView.setImage(SwingFXUtils.toFXImage(bi, null));
             }
         });
-
-        try {
-            new Thread(new Host()).start();
-            Thread.sleep(1000);
-            new Thread(new Guest(InetAddress.getLocalHost())).start();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
     }
 
     @FXML
@@ -71,6 +71,12 @@ public class FXMLDocumentController implements Initializable {
 //        } catch (AWTException ex) {
 //            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
 //        }
+    }
+    
+    @FXML
+    private void startAction(ActionEvent t) throws UnknownHostException{
+        imgContainer.toFront();
+        new Thread(new Guest(InetAddress.getByName(hostAddress.getText()))).start();
     }
 
 }
