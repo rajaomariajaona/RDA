@@ -14,12 +14,47 @@ import rda.other.MouseAction;
 public class MousePacket extends Packet {
 
     private double x, y;
+    private int value;
     private MouseAction mouseAction;
 
-    public MousePacket(double x, double y, MouseAction mouseAction) throws Exception {
+    public MousePacket(double x, double y, MouseAction mouseAction, int value) throws Exception {
         this.x = x;
         this.y = y;
+        this.value = value;
         this.mouseAction = mouseAction;
         serialize(this);
     }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public MouseAction getMouseAction() {
+        return mouseAction;
+    }
+
+    public void setMouseAction(MouseAction mouseAction) {
+        this.mouseAction = mouseAction;
+    }
+
 }

@@ -9,19 +9,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import rda.network.SocketHandler;
 import rda.packet.ImagePacket;
+import rda.packet.MousePacket;
 import rda.packet.Packet;
 import rda.packet.handler.ImageObservable;
+import rda.packet.handler.MouseExecuteAction;
 import rda.packet.handler.PacketReceivedHandler;
 
 /**
  *
  * @author snowden
  */
-public class HostPacketReceivedThread implements Runnable {
+public class FromGuestPacketReceivedThread implements Runnable {
 
     private SocketHandler socketHandler;
 
-    public HostPacketReceivedThread(SocketHandler socketHandler) {
+    public FromGuestPacketReceivedThread(SocketHandler socketHandler) {
         this.socketHandler = socketHandler;
     }
 
@@ -33,7 +35,12 @@ public class HostPacketReceivedThread implements Runnable {
                 if (packet instanceof ImagePacket) {
                     ImagePacket ip = (ImagePacket) packet;
                     ImageObservable.getInstance().setImage(ip.getImage());
-                } else {
+                }else if(packet instanceof MousePacket){
+                    MousePacket mp = (MousePacket) packet;
+                    new MouseExecuteAction(mp);
+                }
+                
+                else {
                     System.out.println(new String(packet.getData()));
                 }
             }

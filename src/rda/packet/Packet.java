@@ -32,7 +32,7 @@ public class Packet implements Serializable {
         return ois.readObject();
     }
     protected void serialize(Object obj) throws Exception {
-        ByteArrayOutputStream baos = null;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(obj);
         this.setData(baos.toByteArray());

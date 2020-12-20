@@ -4,7 +4,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import rda.network.threads.HostPacketReceivedThread;
+import rda.network.threads.FromGuestPacketReceivedThread;
 import rda.network.threads.ScreenShotThread;
 
 /**
@@ -24,7 +24,7 @@ public class Host extends SocketHandler implements Runnable {
             Thread t = new Thread(new ScreenShotThread(this));
             t.start();
             
-            Thread t2 = new Thread(new HostPacketReceivedThread(this));
+            Thread t2 = new Thread(new FromGuestPacketReceivedThread(this));
             t2.start();
 
             t.join();
