@@ -5,12 +5,10 @@
  */
 package rda.packet;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 /**
  *
  * @author snowden
  */
-public class PacketToSend {
-    public static final ConcurrentLinkedQueue<Packet> packets = new ConcurrentLinkedQueue<Packet>();
+public enum KeyboardEventType {
+    
 }

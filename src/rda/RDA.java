@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package rda;
 
 import javafx.application.Application;
@@ -10,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import rda.network.Host;
+import rda.connection.HostConnection;
 
 /**
  *
@@ -32,8 +27,8 @@ public class RDA extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws Exception {
-        new Thread(new Host()).start();
+    public static void main(String[] args){
+        new HostConnection().start();
         launch(args);
     }
 

@@ -11,7 +11,7 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import rda.packet.MousePacket;
+import rda.packets.MousePacket;
 
 /**
  *
@@ -21,10 +21,12 @@ public class MouseExecuteAction {
 
     private Robot robot;
     private MousePacket mousePacket;
-
+    private 
     public MouseExecuteAction(MousePacket mousePacket) {
         try {
             robot = new Robot();
+            robot.setAutoDelay(0);
+            robot.setAutoWaitForIdle(false);
         } catch (AWTException ex) {
             Logger.getLogger(MouseExecuteAction.class.getName()).log(Level.SEVERE, null, ex);
         }
