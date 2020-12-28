@@ -32,10 +32,6 @@ public class Connection {
         return (Packet) ois.readObject();
     }
 
-    public Connection() {
-        // TODO: implement
-    }
-
     @Override
     protected void finalize() throws Throwable {
         super.finalize();

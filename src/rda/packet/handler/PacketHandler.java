@@ -12,7 +12,7 @@ public class PacketHandler {
             ScreenShotShower.show((ImagePacket) packet);
         }
         if(packet instanceof EventPacket){
-            EventExecutor.execute((EventPacket) packet);
+            EventExecutor.getInstance().pushEventPacket((EventPacket) packet);
         }
     }
 }

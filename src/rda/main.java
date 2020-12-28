@@ -7,11 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import rda.connection.HostConnection;
 
-/**
- *
- * @author snowden
- */
-public class RDA extends Application {
+public class main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -24,10 +20,7 @@ public class RDA extends Application {
         stage.show();
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args){
+    public static void main(String[] args) {
         new HostConnection().start();
         launch(args);
     }

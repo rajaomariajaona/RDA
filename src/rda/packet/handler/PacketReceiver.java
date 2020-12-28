@@ -9,12 +9,11 @@ import rda.packet.Packet;
 
 public class PacketReceiver implements Runnable {
 
-    private EventExecutor eventExecutor;
-
     public Connection connection;
 
     public void run() {
         try {
+            initEventExecutor();
             while (!Thread.currentThread().isInterrupted()) {
                 Packet packet = connection.receivePacket();
                 PacketHandler.handle(packet);
@@ -30,6 +29,10 @@ public class PacketReceiver implements Runnable {
 
     public PacketReceiver(Connection connection) {
         this.connection = connection;
+    }
+
+    private void initEventExecutor() {
+        EventExecutor.getInstance().start();
     }
 
 }
