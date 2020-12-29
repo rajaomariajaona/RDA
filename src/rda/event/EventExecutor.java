@@ -62,16 +62,16 @@ public class EventExecutor implements Runnable {
             int y = Double.valueOf(mep.getY() * d.getHeight()).intValue();
             switch (mep.getEventType()) {
                 case PRESS:
-                    robot.mousePress(v);
                     robot.mouseMove(x, y);
+                    robot.mousePress(v);
                     break;
                 case RELEASE:
-                    robot.mouseRelease(v);
                     robot.mouseMove(x, y);
+                    robot.mouseRelease(v);
                     break;
                 case WHEEL:
-                    robot.mouseWheel(v);
                     robot.mouseMove(x, y);
+                    robot.mouseWheel(v);
                     break;
                 case MOVE:
                     robot.mouseMove(x, y);

@@ -22,6 +22,7 @@ public class EventPacketFactory {
             x = x / maxX;
             y = y / maxY;
             if (me.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
+
                 p = new MouseEventPacket(x, y, MouseEventType.PRESS, getMouseButton(me.getButton()));
             } else if (me.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
                 p = new MouseEventPacket(x, y, MouseEventType.RELEASE, getMouseButton(me.getButton()));

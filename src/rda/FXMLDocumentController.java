@@ -5,7 +5,6 @@
  */
 package rda;
 
-import rda.event.EventPacketSender;
 import java.awt.image.BufferedImage;
 import java.net.InetAddress;
 import java.net.URL;
@@ -25,6 +24,7 @@ import javafx.scene.layout.StackPane;
 import rda.connection.Connection;
 import rda.connection.GuestConnection;
 import rda.event.EventPacketFactory;
+import rda.event.EventPacketSender;
 import rda.packet.EventPacket;
 
 /**
