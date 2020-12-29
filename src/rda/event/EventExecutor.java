@@ -82,7 +82,15 @@ public class EventExecutor implements Runnable {
             }
         }
         if (packet instanceof KeyboardEventPacket) {
-
+            KeyboardEventPacket kep = (KeyboardEventPacket) packet;
+            switch(kep.getEventType()){
+                case PRESS:
+                    robot.keyPress(kep.getValue());
+                    break;
+                case RELEASED:
+                    robot.keyRelease(kep.getValue());
+                    break;
+            }
         }
     }
 

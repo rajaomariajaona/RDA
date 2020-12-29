@@ -6,17 +6,17 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane fx:id="parent" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rda.FXMLDocumentController">
+<StackPane fx:id="parent" focusTraversable="true" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rda.FXMLDocumentController">
    <children>
-      <AnchorPane id="AnchorPane" fx:id="imgContainer" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: yellow;">
+      <AnchorPane id="AnchorPane" fx:id="imgContainer" focusTraversable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: yellow;">
          <children>
-            <ImageView fx:id="imgView" fitHeight="600.0" fitWidth="800.0" layoutX="53.0" layoutY="130.0" onMouseEntered="#handleMouse" onMouseExited="#handleMouse" onMouseMoved="#handleMouse" onMousePressed="#handleMouse" onMouseReleased="#handleMouse" onScrollFinished="#handleMouse" onScrollStarted="#handleMouse" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <ImageView fx:id="imgView" fitHeight="600.0" fitWidth="800.0" focusTraversable="true" layoutX="53.0" layoutY="130.0" onMouseEntered="#handleEvents" onMouseExited="#handleEvents" onMouseMoved="#handleEvents" onMousePressed="#handleEvents" onMouseReleased="#handleEvents" onScrollFinished="#handleEvents" onScrollStarted="#handleEvents" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="homeContainer" style="-fx-background-color: red;">
          <children>
             <Button layoutX="351.0" layoutY="267.0" mnemonicParsing="false" onAction="#startAction" text="Start" />
-            <TextField fx:id="hostAddress" layoutX="291.0" layoutY="229.0" promptText="192.168.1.1" text="192.168.1." />
+            <TextField fx:id="hostAddress" layoutX="291.0" layoutY="229.0" promptText="192.168.1.1" text="192.168.1.2" />
          </children>
       </AnchorPane>
    </children>

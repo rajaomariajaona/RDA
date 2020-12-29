@@ -2,10 +2,13 @@ package rda.event;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import rda.packet.EventPacket;
+import rda.packet.KeyboardEventPacket;
 import rda.packet.MouseEventPacket;
+import rda.packet.constant.KeyboardEventType;
 import rda.packet.constant.MouseEventType;
 
 public class EventPacketFactory {
@@ -40,6 +43,15 @@ public class EventPacketFactory {
             y = y / maxY;
             System.out.println(se.getDeltaY() > 0 ? 1 : -1);
             p = new MouseEventPacket(x, y, MouseEventType.WHEEL, se.getDeltaY() > 0 ? 1 : -1);
+        } else if(event instanceof KeyEvent){
+            KeyEvent ke = (KeyEvent) event;
+            if(ke.getEventType().equals(KeyEvent.KEY_PRESSED)){
+                p = new KeyboardEventPacket(KeyboardEventType.PRESS, ke.getCode().impl_getCode());
+            }else if(ke.getEventType().equals(KeyEvent.KEY_RELEASED)){
+                p = new KeyboardEventPacket(KeyboardEventType.RELEASED, ke.getCode().impl_getCode());
+            }
+        }else{
+            System.out.println(event.getClass());
         }
         return p;
     }
