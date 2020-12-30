@@ -46,9 +46,9 @@ public class EventPacketFactory {
         } else if(event instanceof KeyEvent){
             KeyEvent ke = (KeyEvent) event;
             if(ke.getEventType().equals(KeyEvent.KEY_PRESSED)){
-                p = new KeyboardEventPacket(KeyboardEventType.PRESS, ke.getCode().impl_getCode());
+                p = new KeyboardEventPacket(KeyboardEventType.PRESS, ke.getCode());
             }else if(ke.getEventType().equals(KeyEvent.KEY_RELEASED)){
-                p = new KeyboardEventPacket(KeyboardEventType.RELEASED, ke.getCode().impl_getCode());
+                p = new KeyboardEventPacket(KeyboardEventType.RELEASED, ke.getCode());
             }
         }else{
             System.out.println(event.getClass());

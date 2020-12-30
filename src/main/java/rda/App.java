@@ -8,40 +8,53 @@ import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javax.imageio.ImageIO;
 import rda.connection.HostConnection;
 
-public class main extends Application {
+/**
+ * JavaFX App
+ */
+public class App extends Application {
 
+    private static Scene scene;
     public static Stage stage;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) throws IOException {
         Platform.setImplicitExit(false);
-        this.stage = stage;
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        Scene scene = new Scene(root);
+        App.stage = stage;
+        scene = new Scene(loadFXML("main"));
         stage.setScene(scene);
         stage.setMinHeight(600);
         stage.setMinWidth(800);
         stage.setResizable(true);
+        stage.setTitle("RDA");
         stage.show();
         test();
     }
 
-    public static void main(String[] args) {
-        
+    static void setRoot(String fxml) throws IOException {
+        scene.setRoot(loadFXML(fxml));
+    }
+
+    private static Parent loadFXML(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        return fxmlLoader.load();
+    }
+
+    public static void launch(String[] args) {
         new HostConnection().start();
-        launch(args);
+        launch();
     }
 
     private void test() {
@@ -50,15 +63,15 @@ public class main extends Application {
             SystemTray tray = SystemTray.getSystemTray();
             Image image = null;
             try {
-                image = ImageIO.read(getClass().getResourceAsStream("/resource/images/tray.png"));
+                image = ImageIO.read(App.class.getResourceAsStream("images/tray.png"));
             } catch (IOException ex) {
-                Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
             }
             ActionListener listener = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Platform.runLater(() -> {
-                        main.stage.show();
-                        main.stage.toFront();
+                        App.stage.show();
+                        App.stage.toFront();
                     });
                 }
             };
@@ -66,7 +79,7 @@ public class main extends Application {
             MenuItem lol = new MenuItem("Ouvrir");
             lol.addActionListener(listener);
             popup.add(lol);
-            
+
             MenuItem exit = new MenuItem("Quitter");
             exit.addActionListener((ae) -> {
                 System.exit(0);

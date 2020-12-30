@@ -6,12 +6,12 @@
 
 package rda.screenshot;
 
-import rda.FXMLDocumentController;
+import rda.MainController;
 import rda.packet.ImagePacket;
 
 public class ScreenShotShower {
    public static void show(ImagePacket imagePacket) throws Exception {
-       FXMLDocumentController.showImage(imagePacket.getImage());
+       MainController.showImage(imagePacket.getImage());
    }
 
 }

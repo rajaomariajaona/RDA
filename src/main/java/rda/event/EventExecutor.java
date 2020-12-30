@@ -1,12 +1,11 @@
 package rda.event;
 
-import java.awt.AWTException;
 import java.awt.Dimension;
-import java.awt.Robot;
 import java.awt.Toolkit;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.robot.Robot;
 import rda.packet.EventPacket;
 import rda.packet.KeyboardEventPacket;
 import rda.packet.MouseEventPacket;
@@ -19,11 +18,7 @@ public class EventExecutor implements Runnable {
     private EventExecutor() {
         eventPacket = new java.util.LinkedList<EventPacket>();
         Collections.synchronizedCollection(eventPacket);
-        try {
-            robot = new Robot();
-        } catch (AWTException ex) {
-            Logger.getLogger(EventExecutor.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        robot = new Robot();
     }
 
     public void start() {
@@ -56,22 +51,21 @@ public class EventExecutor implements Runnable {
     public void execute(EventPacket packet) {
         if (packet instanceof MouseEventPacket) {
             MouseEventPacket mep = (MouseEventPacket) packet;
-            int v = mep.getValue();
             Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
             int x = Double.valueOf(mep.getX() * d.getWidth()).intValue();
             int y = Double.valueOf(mep.getY() * d.getHeight()).intValue();
             switch (mep.getEventType()) {
                 case PRESS:
                     robot.mouseMove(x, y);
-                    robot.mousePress(v);
+                    robot.mousePress(mep.getMouseButton());
                     break;
                 case RELEASE:
                     robot.mouseMove(x, y);
-                    robot.mouseRelease(v);
+                    robot.mouseRelease(mep.getMouseButton());
                     break;
                 case WHEEL:
                     robot.mouseMove(x, y);
-                    robot.mouseWheel(v);
+                    robot.mouseWheel(mep.getValue());
                     break;
                 case MOVE:
                     robot.mouseMove(x, y);
@@ -85,10 +79,10 @@ public class EventExecutor implements Runnable {
             KeyboardEventPacket kep = (KeyboardEventPacket) packet;
             switch(kep.getEventType()){
                 case PRESS:
-                    robot.keyPress(kep.getValue());
+                    robot.keyPress(kep.getKeyCode());
                     break;
                 case RELEASED:
-                    robot.keyRelease(kep.getValue());
+                    robot.keyRelease(kep.getKeyCode());
                     break;
             }
         }
