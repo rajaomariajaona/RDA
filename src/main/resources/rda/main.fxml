@@ -11,7 +11,7 @@
    <children>
       <AnchorPane id="AnchorPane" fx:id="imgContainer" focusTraversable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: yellow;">
          <children>
-            <ImageView fx:id="imgView" fitHeight="600.0" fitWidth="800.0" focusTraversable="true" layoutX="53.0" layoutY="130.0" onMouseEntered="#handleEvents" onMouseExited="#handleEvents" onMouseMoved="#handleEvents" onMousePressed="#handleEvents" onMouseReleased="#handleEvents" onScrollFinished="#handleEvents" onScrollStarted="#handleEvents" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <ImageView fx:id="imgView" fitHeight="600.0" fitWidth="800.0" focusTraversable="true" layoutX="53.0" layoutY="130.0" onMouseEntered="#handleEvents" onMouseExited="#handleEvents" onMouseMoved="#handleEvents" onMousePressed="#handleEvents" onMouseReleased="#handleEvents" onScroll="#handleEvents" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="homeContainer" style="-fx-background-color: red;">

@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import rda.packet.handler.PacketReceiver;
 
-public class GuestConnection extends Connection implements Runnable{
+public class GuestConnection extends Connection{
     
     private Socket socket;
     
@@ -28,11 +28,5 @@ public class GuestConnection extends Connection implements Runnable{
             socket.close();
         } catch (Exception e) {
         }
-    }
-
-    @Override
-    public void run() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+    }    
 }

@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.scene.robot.Robot;
 import rda.packet.EventPacket;
 import rda.packet.KeyboardEventPacket;
@@ -18,7 +19,9 @@ public class EventExecutor implements Runnable {
     private EventExecutor() {
         eventPacket = new java.util.LinkedList<EventPacket>();
         Collections.synchronizedCollection(eventPacket);
-        robot = new Robot();
+        Platform.runLater(() -> {
+            robot = new Robot();
+        });
     }
 
     public void start() {
@@ -54,37 +57,40 @@ public class EventExecutor implements Runnable {
             Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
             int x = Double.valueOf(mep.getX() * d.getWidth()).intValue();
             int y = Double.valueOf(mep.getY() * d.getHeight()).intValue();
-            switch (mep.getEventType()) {
-                case PRESS:
-                    robot.mouseMove(x, y);
-                    robot.mousePress(mep.getMouseButton());
-                    break;
-                case RELEASE:
-                    robot.mouseMove(x, y);
-                    robot.mouseRelease(mep.getMouseButton());
-                    break;
-                case WHEEL:
-                    robot.mouseMove(x, y);
-                    robot.mouseWheel(mep.getValue());
-                    break;
-                case MOVE:
-                    robot.mouseMove(x, y);
-                    break;
-                default:
-                    robot.mouseMove(x, y);
-                    break;
-            }
+            Platform.runLater(() -> {
+                switch (mep.getEventType()) {
+                    case PRESS:
+                        robot.mouseMove(x, y);
+                        robot.mousePress(mep.getMouseButton());
+                        break;
+                    case RELEASE:
+                        robot.mouseMove(x, y);
+                        robot.mouseRelease(mep.getMouseButton());
+                        break;
+                    case WHEEL:
+                        robot.mouseWheel(mep.getValue());
+                        break;
+                    case MOVE:
+                        robot.mouseMove(x, y);
+                        break;
+                    default:
+                        robot.mouseMove(x, y);
+                        break;
+                }
+            });
         }
         if (packet instanceof KeyboardEventPacket) {
             KeyboardEventPacket kep = (KeyboardEventPacket) packet;
-            switch(kep.getEventType()){
-                case PRESS:
-                    robot.keyPress(kep.getKeyCode());
-                    break;
-                case RELEASED:
-                    robot.keyRelease(kep.getKeyCode());
-                    break;
-            }
+            Platform.runLater(() -> {
+                switch (kep.getEventType()) {
+                    case PRESS:
+                        robot.keyPress(kep.getKeyCode());
+                        break;
+                    case RELEASED:
+                        robot.keyRelease(kep.getKeyCode());
+                        break;
+                }
+            });
         }
     }
 

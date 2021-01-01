@@ -26,9 +26,9 @@ public class EventPacketFactory {
             y = y / maxY;
             if (me.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
 
-                p = new MouseEventPacket(x, y, MouseEventType.PRESS, getMouseButton(me.getButton()));
+                p = new MouseEventPacket(x, y, MouseEventType.PRESS, me.getButton());
             } else if (me.getEventType().equals(MouseEvent.MOUSE_RELEASED)) {
-                p = new MouseEventPacket(x, y, MouseEventType.RELEASE, getMouseButton(me.getButton()));
+                p = new MouseEventPacket(x, y, MouseEventType.RELEASE, me.getButton());
             } else if (me.getEventType().equals(MouseEvent.MOUSE_MOVED)) {
                 p = new MouseEventPacket(x, y, MouseEventType.MOVE, 0);
             }
@@ -41,32 +41,18 @@ public class EventPacketFactory {
             double maxY = source.getFitHeight();
             x = x / maxX;
             y = y / maxY;
-            System.out.println(se.getDeltaY() > 0 ? 1 : -1);
-            p = new MouseEventPacket(x, y, MouseEventType.WHEEL, se.getDeltaY() > 0 ? 1 : -1);
-        } else if(event instanceof KeyEvent){
+            int v = Double.valueOf(se.getDeltaY()).intValue();
+            p = new MouseEventPacket(x, y, MouseEventType.WHEEL, Double.valueOf(-v / 3).intValue());
+        } else if (event instanceof KeyEvent) {
             KeyEvent ke = (KeyEvent) event;
-            if(ke.getEventType().equals(KeyEvent.KEY_PRESSED)){
+            if (ke.getEventType().equals(KeyEvent.KEY_PRESSED)) {
                 p = new KeyboardEventPacket(KeyboardEventType.PRESS, ke.getCode());
-            }else if(ke.getEventType().equals(KeyEvent.KEY_RELEASED)){
+            } else if (ke.getEventType().equals(KeyEvent.KEY_RELEASED)) {
                 p = new KeyboardEventPacket(KeyboardEventType.RELEASED, ke.getCode());
             }
-        }else{
+        } else {
             System.out.println(event.getClass());
         }
         return p;
     }
-
-    private static int getMouseButton(javafx.scene.input.MouseButton m) {
-        switch (m) {
-            case MIDDLE:
-                return java.awt.event.InputEvent.BUTTON2_DOWN_MASK;
-            case PRIMARY:
-                return java.awt.event.InputEvent.BUTTON1_DOWN_MASK;
-            case SECONDARY:
-                return java.awt.event.InputEvent.BUTTON3_DOWN_MASK;
-            default:
-                return 0;
-        }
-    }
-
 }
