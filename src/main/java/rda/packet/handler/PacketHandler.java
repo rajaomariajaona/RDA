@@ -1,6 +1,8 @@
 package rda.packet.handler;
 
+import rda.clipboard.ClipboardUtil;
 import rda.event.EventExecutor;
+import rda.packet.ClipboardPacket;
 import rda.packet.EventPacket;
 import rda.packet.ImagePacket;
 import rda.packet.Packet;
@@ -13,6 +15,9 @@ public class PacketHandler {
         }
         if(packet instanceof EventPacket){
             EventExecutor.getInstance().pushEventPacket((EventPacket) packet);
+        }
+        if(packet instanceof ClipboardPacket){
+            ClipboardUtil.setClipboardText((((ClipboardPacket) packet).getMessage()));
         }
     }
 }

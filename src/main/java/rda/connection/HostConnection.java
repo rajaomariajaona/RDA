@@ -2,6 +2,7 @@ package rda.connection;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import rda.clipboard.ClipboardEvent;
 import rda.packet.handler.PacketReceiver;
 import rda.screenshot.ScreenShotSender;
 
@@ -42,6 +43,8 @@ public class HostConnection extends Connection implements Runnable {
         Thread packetReceiverThread = new Thread(packetReceiver);
         packetReceiverThread.setPriority(Thread.NORM_PRIORITY);
         packetReceiverThread.start();
+        ClipboardEvent ce = new ClipboardEvent(this);
+        ce.startListening();
     }
 
 }
