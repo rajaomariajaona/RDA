@@ -20,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -104,6 +105,23 @@ public class MainController implements Initializable {
             }
 
         }, service);
+    }
+    
+    @FXML
+    private void quitAction(ActionEvent ae){
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+        a.setContentText("Do you really want to quit?");
+        a.showAndWait();
+        if(a.getResult().equals(ButtonType.OK)){
+            System.exit(0);
+        }else if(a.getResult().equals(ButtonType.NO)){
+            
+        }
+    }
+    
+    @FXML
+    private void networkSettingAction(ActionEvent ae){
+        
     }
 
     private void reset() {
