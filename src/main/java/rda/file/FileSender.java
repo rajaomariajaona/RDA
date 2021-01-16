@@ -47,6 +47,7 @@ public class FileSender implements Runnable {
                         data = new byte[len];
                         System.arraycopy(block, 0, data, 0, len);
                     }
+                    block = new byte[4 * 1024];
                     fp = new FilePacket(path, f.length(), data, len, i++);
                     connection.sendPacket(fp);
                     fos.write(fp.getFileData(), 0, fp.getPosition());

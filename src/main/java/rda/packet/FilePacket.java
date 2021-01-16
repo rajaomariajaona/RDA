@@ -15,7 +15,6 @@ public class FilePacket extends Packet {
         this.fileData = fileData;
         this.position = position;
         this.index = index;
-        serialize(this);
     }
 
     public int getIndex() {

@@ -16,7 +16,7 @@ public class FileReceiver {
     private static Long currentSize;
     private static int last;
 
-    public static void write(FilePacket filePacket) {
+    public synchronized static void write(FilePacket filePacket) {
         try {
             System.out.println(filePacket.getIndex());
 //            System.out.println(filePacket.getSize());

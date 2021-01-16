@@ -16,7 +16,9 @@ public class PacketReceiver implements Runnable {
             initEventExecutor();
             while (!Thread.currentThread().isInterrupted()) {
                 Packet packet = connection.receivePacket();
-                PacketHandler.handle(packet);
+                synchronized (packet) {
+                    PacketHandler.handle(packet);
+                }
             }
         } catch (IOException ex) {
             Logger.getLogger(PacketReceiver.class.getName()).log(Level.SEVERE, null, ex);
