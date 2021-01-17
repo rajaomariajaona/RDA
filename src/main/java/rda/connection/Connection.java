@@ -24,12 +24,16 @@ public class Connection {
     }
 
     public void sendPacket(Packet packet) throws IOException {
-        oos.writeObject(packet);
-        oos.flush();
+        synchronized (oos) {
+            oos.writeObject(packet);
+            oos.flush();
+        }
     }
 
     public Packet receivePacket() throws IOException, ClassNotFoundException {
-        return (Packet) ois.readObject();
+        synchronized (ois) {
+            return (Packet) ois.readObject();
+        }
     }
 
     @Override

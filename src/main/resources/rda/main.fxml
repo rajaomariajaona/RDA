@@ -17,16 +17,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rda.MainController">
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rda.MainController">
    <center>
       <StackPane fx:id="parent" focusTraversable="true">
          <children>
-            <AnchorPane id="AnchorPane" fx:id="imgContainer" focusTraversable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: yellow;">
+            <StackPane fx:id="imgContainer">
                <children>
-                  <ImageView fx:id="imgView" fitHeight="600.0" fitWidth="800.0" focusTraversable="true" layoutX="53.0" layoutY="130.0" onMouseEntered="#handleEvents" onMouseExited="#handleEvents" onMouseMoved="#handleEvents" onMousePressed="#handleEvents" onMouseReleased="#handleEvents" onScroll="#handleEvents" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <AnchorPane id="AnchorPane" focusTraversable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: yellow;">
+                     <children>
+                        <ImageView fx:id="imgView" fitHeight="600.0" fitWidth="800.0" focusTraversable="true" layoutX="53.0" layoutY="130.0" onMouseEntered="#handleEvents" onMouseExited="#handleEvents" onMouseMoved="#handleEvents" onMousePressed="#handleEvents" onMouseReleased="#handleEvents" onScroll="#handleEvents" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+                  <Button mnemonicParsing="false" onAction="#sendFile" text="Button" />
                </children>
-            </AnchorPane>
+            </StackPane>
             <AnchorPane fx:id="homeContainer" style="-fx-background-color: white;">
                <children>
                   <HBox layoutX="291.0" layoutY="229.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

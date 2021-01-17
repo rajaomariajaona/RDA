@@ -16,11 +16,8 @@ public class FileReceiver {
     private static Long currentSize;
     private static int last;
 
-    public synchronized static void write(FilePacket filePacket) {
+    public static void write(FilePacket filePacket) {
         try {
-            System.out.println(filePacket.getIndex());
-//            System.out.println(filePacket.getSize());
-//            System.out.println((filePacket.getSize() - currentSize) * 100 / filePacket.getSize() + " %");
             if (currentFile == null ? false : currentFile.equals(filePacket.getPath())) {
                 if (currentSize <= 4 * 1024) {
                     System.out.println(Arrays.toString(filePacket.getFileData()));
@@ -36,6 +33,7 @@ public class FileReceiver {
                     }
                 } else {
                     fos.write(filePacket.getFileData(), 0, filePacket.getPosition());
+                    fos.flush();
                     currentSize -= 4 * 1024;
                 }
             } else {

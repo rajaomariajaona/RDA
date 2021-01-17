@@ -34,7 +34,6 @@ public class FileSender implements Runnable {
             FileOutputStream fos = null;
             try {
                 fis = new FileInputStream(f);
-                fos = new FileOutputStream(new File("test.mp4"));
                 byte[] block = new byte[4 * 1024];
                 int len = -1;
                 FilePacket fp = null;
@@ -48,12 +47,9 @@ public class FileSender implements Runnable {
                         System.arraycopy(block, 0, data, 0, len);
                     }
                     block = new byte[4 * 1024];
-                    fp = new FilePacket(path, f.length(), data, len, i++);
+                    fp = new FilePacket(path, f.length(), data, len);
                     connection.sendPacket(fp);
-                    fos.write(fp.getFileData(), 0, fp.getPosition());
                 }
-                fos.flush();
-                fos.close();
                 System.out.println(Arrays.toString(fp.getFileData()));
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(FileSender.class.getName()).log(Level.SEVERE, null, ex);

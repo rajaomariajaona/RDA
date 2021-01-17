@@ -15,7 +15,8 @@ public class ScreenShotSender implements Runnable {
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                connection.sendPacket(new ImagePacket(ScreenShotFactory.createScreenShot()));
+                ImagePacket ip = new ImagePacket(ScreenShotFactory.createScreenShot());
+                connection.sendPacket(ip);
                 Thread.sleep(25);
             }
         } catch (AWTException ex) {

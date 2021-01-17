@@ -7,21 +7,14 @@ public class FilePacket extends Packet {
     private final boolean isDirectory = false;
     private final byte[] fileData;
     private final int position;
-    private final int index;
 
-    public FilePacket(String path, Long size, byte[] fileData, int position, int index) throws Exception {
+    public FilePacket(String path, Long size, byte[] fileData, int position) throws Exception {
         this.size = size;
         this.path = path;
         this.fileData = fileData;
         this.position = position;
-        this.index = index;
     }
 
-    public int getIndex() {
-        return index;
-    }
-    
-    
     public byte[] getFileData() {
         return fileData;
     }

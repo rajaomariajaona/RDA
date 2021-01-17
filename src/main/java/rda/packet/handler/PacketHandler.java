@@ -12,7 +12,7 @@ import rda.screenshot.ScreenShotShower;
 
 public class PacketHandler {
 
-    public synchronized static void handle(Packet packet) throws Exception {
+    public static void handle(Packet packet) throws Exception {
         if (packet instanceof ImagePacket) {
             ScreenShotShower.show((ImagePacket) packet);
         }

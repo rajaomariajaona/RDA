@@ -27,7 +27,9 @@ public class ImagePacket extends Packet {
     @Override
     protected Object deserialize() throws Exception {
         ByteArrayInputStream bais = new ByteArrayInputStream(this.getData());
-        return ImageIO.read(bais);
+        Object res = ImageIO.read(bais);
+        bais.close();
+        return res;
     }
 
     @Override
@@ -35,7 +37,9 @@ public class ImagePacket extends Packet {
         BufferedImage bufferedImage = (BufferedImage) obj;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(bufferedImage, this.imageType, baos);
+        bufferedImage = null;
         setData(baos.toByteArray());
+        baos.close();
     }
 
     public ImagePacket(BufferedImage image) throws Exception {

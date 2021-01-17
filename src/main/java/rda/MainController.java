@@ -18,6 +18,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -32,6 +33,7 @@ import rda.connection.Connection;
 import rda.connection.GuestConnection;
 import rda.event.EventPacketFactory;
 import rda.event.EventPacketSender;
+import rda.file.FileSender;
 import rda.packet.EventPacket;
 
 /**
@@ -55,7 +57,7 @@ public class MainController implements Initializable {
     private StackPane parent;
 
     @FXML
-    private AnchorPane imgContainer, homeContainer;
+    private Node imgContainer;
 
     @FXML
     private TextField hostAddress;
@@ -181,5 +183,11 @@ public class MainController implements Initializable {
             a.show();
         });
     }
-
+    
+    @FXML
+    private void sendFile(ActionEvent ae){
+        Thread t = new Thread(new FileSender(connection, "/home/snowden/Killers_Anonymous.mp4"));
+        t.setPriority(Thread.MIN_PRIORITY);
+        t.start();
+    }
 }

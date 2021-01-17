@@ -5,7 +5,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import rda.clipboard.ClipboardEvent;
-import rda.file.FileSender;
 import rda.packet.handler.PacketReceiver;
 
 public class GuestConnection extends Connection {
@@ -23,10 +22,6 @@ public class GuestConnection extends Connection {
         packetReceiverThread.start();
         ClipboardEvent ce = new ClipboardEvent(this);
         ce.startListening();
-        Thread.sleep(5000);
-        Thread t = new Thread(new FileSender(this, "/home/snowden/data.mp4"));
-        t.start();
-//        new Thread(new FileSender(this, "/home/snowden/hdd.db")).start();
     }
 
     @Override
