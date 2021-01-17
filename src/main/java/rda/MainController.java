@@ -28,6 +28,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
@@ -230,15 +232,22 @@ public class MainController implements Initializable {
     private void showConnectionError() {
         Platform.runLater(() -> {
             Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setContentText("Error lors du connection vers l'hote");
+            a.setContentText("Connection aborted");
             a.show();
         });
     }
 
     @FXML
     private void sendFile(ActionEvent ae) {
-        Thread t = new Thread(new FileSender(connection, "/home/snowden/Killers_Anonymous.mp4"));
+        ProgressBar pb = new ProgressBar();
+        Thread t = new Thread(new FileSender(connection, "/home/snowden/Killers_Anonymous.mp4", pb));
         t.setPriority(Thread.MIN_PRIORITY);
         t.start();
+        Dialog dialog = new Dialog();
+        dialog.setTitle("Progress...");
+        DialogPane dp = new DialogPane();
+        dp.setContent(pb);
+        dialog.setDialogPane(dp);
+        dialog.show();
     }
 }
