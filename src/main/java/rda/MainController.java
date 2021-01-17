@@ -6,8 +6,13 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import java.awt.image.BufferedImage;
+import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -22,12 +27,15 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.util.StringConverter;
 import rda.connection.Connection;
 import rda.connection.GuestConnection;
 import rda.event.EventPacketFactory;
@@ -61,6 +69,12 @@ public class MainController implements Initializable {
     @FXML
     private TextField hostAddress;
 
+    @FXML
+    private ChoiceBox<NetworkInterface> choiceNetwork;
+
+    @FXML
+    private Label myIP;
+
     private EventPacketSender eventPacketSender;
 
     private Connection connection = null;
@@ -68,10 +82,48 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        try {
+            List<NetworkInterface> listInterface = Collections.list(NetworkInterface.getNetworkInterfaces());
+            choiceNetwork.getItems().addAll(listInterface);
+            choiceNetwork.setValue(listInterface.get(0));
+            setValue();
+            choiceNetwork.setConverter(new StringConverter<NetworkInterface>() {
+                List<NetworkInterface> list = Collections.list(NetworkInterface.getNetworkInterfaces());
+                @Override
+                public String toString(NetworkInterface t) {
+                    return t.getDisplayName();
+                }
+
+                @Override
+                public NetworkInterface fromString(String string) {
+                    for (NetworkInterface t : list) {
+                        if (t.getDisplayName().equals(string)) {
+                            return t;
+                        }
+                    }
+                    return null;
+                }
+            });
+            choiceNetwork.setOnAction((t) -> {
+                setValue();
+            });
+            
+        } catch (SocketException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         imgContainer.setVisible(false);
         MainController._imgView = imgView;
         imgView.fitHeightProperty().bind(parent.heightProperty());
         imgView.fitWidthProperty().bind(parent.widthProperty());
+    }
+
+    private void setValue() {
+        List<InetAddress> addresses = Collections.list(choiceNetwork.getValue().getInetAddresses());
+        for (InetAddress ad : addresses) {
+            if (ad instanceof Inet4Address) {
+                myIP.setText(ad.getHostAddress());
+            }
+        }
     }
 
     @FXML
@@ -107,22 +159,22 @@ public class MainController implements Initializable {
 
         }, service);
     }
-    
+
     @FXML
-    private void quitAction(ActionEvent ae){
+    private void quitAction(ActionEvent ae) {
         Alert a = new Alert(Alert.AlertType.CONFIRMATION);
         a.setContentText("Do you really want to quit?");
         a.showAndWait();
-        if(a.getResult().equals(ButtonType.OK)){
+        if (a.getResult().equals(ButtonType.OK)) {
             System.exit(0);
-        }else if(a.getResult().equals(ButtonType.NO)){
-            
+        } else if (a.getResult().equals(ButtonType.NO)) {
+
         }
     }
-    
+
     @FXML
-    private void networkSettingAction(ActionEvent ae){
-        
+    private void networkSettingAction(ActionEvent ae) {
+
     }
 
     private void reset() {
@@ -182,9 +234,9 @@ public class MainController implements Initializable {
             a.show();
         });
     }
-    
+
     @FXML
-    private void sendFile(ActionEvent ae){
+    private void sendFile(ActionEvent ae) {
         Thread t = new Thread(new FileSender(connection, "/home/snowden/Killers_Anonymous.mp4"));
         t.setPriority(Thread.MIN_PRIORITY);
         t.start();
