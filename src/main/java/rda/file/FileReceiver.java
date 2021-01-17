@@ -38,9 +38,13 @@ public class FileReceiver {
             } else {
                 currentFile = filePacket.getPath();
                 currentSize = filePacket.getSize();
-                File f = Path.of(DEFAULT_PATH, Path.of(currentFile).getFileName().toString()).toFile();
-                fos = new FileOutputStream(f);
-                write(filePacket);
+                File f = Path.of(DEFAULT_PATH, Path.of(currentFile).toString()).toFile();
+                if (filePacket.isDirectory()) {
+                    f.mkdirs();
+                } else {
+                    fos = new FileOutputStream(f);
+                    write(filePacket);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();

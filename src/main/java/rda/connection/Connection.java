@@ -25,7 +25,7 @@ public class Connection {
 
     public void sendPacket(Packet packet) throws IOException {
         synchronized (this) {
-            oos.writeUnshared(packet);
+            oos.writeObject(packet);
             oos.flush();
             if(++counter > 500){
                 counter = 0;
@@ -36,7 +36,7 @@ public class Connection {
 
     public Packet receivePacket() throws IOException, ClassNotFoundException {
         synchronized (ois) {
-            return (Packet) ois.readUnshared();
+            return (Packet) ois.readObject();
         }
     }
 

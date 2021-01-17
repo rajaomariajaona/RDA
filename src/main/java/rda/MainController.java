@@ -6,6 +6,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -239,15 +240,12 @@ public class MainController implements Initializable {
 
     @FXML
     private void sendFile(ActionEvent ae) {
-        ProgressBar pb = new ProgressBar();
-        Thread t = new Thread(new FileSender(connection, "/home/snowden/Killers_Anonymous.mp4", pb));
-        t.setPriority(Thread.MIN_PRIORITY);
-        t.start();
-        Dialog dialog = new Dialog();
-        dialog.setTitle("Progress...");
-        DialogPane dp = new DialogPane();
-        dp.setContent(pb);
-        dialog.setDialogPane(dp);
-        dialog.show();
+        try {
+            Thread t = new Thread(new FileSender(connection, "/home/snowden/copy/"));
+            t.setPriority(Thread.MIN_PRIORITY);
+            t.start();
+        } catch (IOException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

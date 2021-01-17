@@ -1,18 +1,22 @@
 package rda.packet;
 
 public class FilePacket extends Packet {
-
-    private final Long size;
+    
+    private Long size;
     private final String path;
-    private final boolean isDirectory = false;
-    private final byte[] fileData;
-    private final int position;
+    private boolean isDirectory = false;
+    private byte[] fileData;
+    private int position;
 
     public FilePacket(String path, Long size, byte[] fileData, int position) throws Exception {
         this.size = size;
         this.path = path;
         this.fileData = fileData;
         this.position = position;
+    }
+    public FilePacket(String path) throws Exception {
+        this.path = path;
+        this.isDirectory = true;
     }
 
     public byte[] getFileData() {
@@ -21,6 +25,9 @@ public class FilePacket extends Packet {
 
     public boolean isDirectory() {
         return isDirectory;
+    }
+    public void setDirectory(boolean t){
+        this.isDirectory = t;
     }
 
     public Long getSize() {

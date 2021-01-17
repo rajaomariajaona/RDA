@@ -8,5 +8,7 @@ module rda {
     requires com.google.common;
 
     opens rda to javafx.fxml;
+    opens rda.file to javafx.fxml;
     exports rda;
+    exports rda.file;
 }
