@@ -3,7 +3,6 @@ package rda.file;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rda.packet.FilePacket;
@@ -14,14 +13,13 @@ public class FileReceiver {
     private static String currentFile;
     private static FileOutputStream fos;
     private static Long currentSize;
-    private static int last;
 
     public static void write(FilePacket filePacket) {
         try {
             if (currentFile == null ? false : currentFile.equals(filePacket.getPath())) {
                 if (currentSize <= 4 * 1024) {
-                    System.out.println(Arrays.toString(filePacket.getFileData()));
                     fos.write(filePacket.getFileData(), 0, filePacket.getPosition());
+                    fos.flush();
                     try {
                         fos.flush();
                         fos.close();
@@ -36,6 +34,7 @@ public class FileReceiver {
                     fos.flush();
                     currentSize -= 4 * 1024;
                 }
+                filePacket = null;
             } else {
                 currentFile = filePacket.getPath();
                 currentSize = filePacket.getSize();

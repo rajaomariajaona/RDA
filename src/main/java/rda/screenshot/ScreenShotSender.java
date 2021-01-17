@@ -1,6 +1,7 @@
 package rda.screenshot;
 
 import java.awt.AWTException;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,9 +16,13 @@ public class ScreenShotSender implements Runnable {
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                ImagePacket ip = new ImagePacket(ScreenShotFactory.createScreenShot());
+                BufferedImage bi = ScreenShotFactory.createScreenShot();
+                ImagePacket ip = new ImagePacket(bi);
                 connection.sendPacket(ip);
-                Thread.sleep(25);
+                bi.flush();
+                bi = null;
+                ip = null;
+                Thread.sleep(100);
             }
         } catch (AWTException ex) {
             Logger.getLogger(ScreenShotSender.class.getName()).log(Level.SEVERE, null, ex);

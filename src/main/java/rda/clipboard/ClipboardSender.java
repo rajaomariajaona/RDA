@@ -1,6 +1,5 @@
 package rda.clipboard;
 
-import javafx.scene.robot.Robot;
 import rda.connection.Connection;
 import rda.packet.ClipboardPacket;
 

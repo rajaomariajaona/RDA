@@ -50,7 +50,6 @@ public class FileSender implements Runnable {
                     fp = new FilePacket(path, f.length(), data, len);
                     connection.sendPacket(fp);
                 }
-                System.out.println(Arrays.toString(fp.getFileData()));
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(FileSender.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {

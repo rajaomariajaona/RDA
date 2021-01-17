@@ -10,12 +10,11 @@ public class ClipboardPacket extends Packet {
     }
     
     public String getMessage() throws Exception {
-        return (String) deserialize();
+        return message;
     }
 
     public void setMessage(String message) throws Exception {
         this.message = message;
-        serialize(message);
     }
     
 }

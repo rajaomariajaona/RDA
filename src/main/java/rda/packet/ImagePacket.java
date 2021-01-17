@@ -24,17 +24,14 @@ public class ImagePacket extends Packet {
         this.imageType = imageType;
     }
 
-    @Override
-    protected Object deserialize() throws Exception {
+    private Object deserialize() throws Exception {
         ByteArrayInputStream bais = new ByteArrayInputStream(this.getData());
         Object res = ImageIO.read(bais);
         bais.close();
         return res;
     }
 
-    @Override
-    protected void serialize(Object obj) throws Exception {
-        BufferedImage bufferedImage = (BufferedImage) obj;
+    private void serialize(BufferedImage bufferedImage) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(bufferedImage, this.imageType, baos);
         bufferedImage = null;

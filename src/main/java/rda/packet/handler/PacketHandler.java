@@ -25,5 +25,6 @@ public class PacketHandler {
         if (packet instanceof FilePacket) {
             FileReceiver.write((FilePacket) packet);
         }
+        packet = null;
     }
 }
