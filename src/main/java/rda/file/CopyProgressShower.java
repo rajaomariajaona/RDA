@@ -28,12 +28,19 @@ public class CopyProgressShower {
         stage.setMinHeight(HEIGHT);
         stage.setMaxHeight(HEIGHT);
         stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Copying...");
         stage.setScene(scene);
         cpc = (CopyProgressController) fxmlLoader.getController();
     }
     
     public void setOnCancel(EventHandler<ActionEvent> eh) {
         cpc.setOnCancel(eh);
+    }
+    
+    public void setCurrentFile(String filename){
+        Platform.runLater(() -> {
+            cpc.setCurrentFile(filename);
+        });
     }
 
     public void setCurrentProgress(double d) {
@@ -52,6 +59,11 @@ public class CopyProgressShower {
     public void showAndWait() {
         Platform.runLater(() -> {
             stage.showAndWait();
+        });
+    }
+    public void close(){
+        Platform.runLater(() -> {
+            stage.close();
         });
     }
 }

@@ -6,6 +6,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -29,15 +30,17 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import rda.connection.Connection;
 import rda.connection.GuestConnection;
@@ -83,6 +86,9 @@ public class MainController implements Initializable {
     private Connection connection = null;
     boolean in = false;
 
+    boolean keyboardEvents = false;
+    boolean mouseEvents = false;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
@@ -92,6 +98,7 @@ public class MainController implements Initializable {
             setValue();
             choiceNetwork.setConverter(new StringConverter<NetworkInterface>() {
                 List<NetworkInterface> list = Collections.list(NetworkInterface.getNetworkInterfaces());
+
                 @Override
                 public String toString(NetworkInterface t) {
                     return t.getDisplayName();
@@ -110,7 +117,7 @@ public class MainController implements Initializable {
             choiceNetwork.setOnAction((t) -> {
                 setValue();
             });
-            
+
         } catch (SocketException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -131,8 +138,10 @@ public class MainController implements Initializable {
 
     @FXML
     private void handleEvents(InputEvent ie) throws Exception {
-        EventPacket ep = EventPacketFactory.createEventPacket(ie);
-        this.eventPacketSender.send(ep);
+        if (ie instanceof KeyEvent && keyboardEvents || ie instanceof MouseEvent && mouseEvents) {
+            EventPacket ep = EventPacketFactory.createEventPacket(ie);
+            this.eventPacketSender.send(ep);
+        }
     }
 
     @FXML
@@ -241,11 +250,62 @@ public class MainController implements Initializable {
     @FXML
     private void sendFile(ActionEvent ae) {
         try {
-            Thread t = new Thread(new FileSender(connection, "/home/snowden/copy/"));
+            FileChooser fileChooser = new FileChooser();
+            
+            List<File> files = fileChooser.showOpenMultipleDialog((Stage) getSource(ae).getScene().getWindow());
+            FileSender fs = new FileSender(connection, files);
+            Thread t = new Thread(fs);
             t.setPriority(Thread.MIN_PRIORITY);
             t.start();
         } catch (IOException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @FXML
+    private void setFullScreen(ActionEvent ae) {
+        Stage s = (Stage) getSource(ae).getScene().getWindow();
+        s.setFullScreen(!s.isFullScreen());
+        if(s.isFullScreen()){
+            setImage(ae, "fullscreen-active.png");
+        }else{
+            setImage(ae, "fullscreen.png");
+        }
+    }
+
+    @FXML
+    private void setMouseActive(ActionEvent ae) {
+        mouseEvents = !mouseEvents;
+        if (mouseEvents) {
+            setImage(ae, "mouse-active.png");
+        }else{
+            setImage(ae, "mouse.png");
+        }
+    }
+
+    @FXML
+    private void setKeyboardActive(ActionEvent ae) {
+        keyboardEvents = !keyboardEvents;
+        if (keyboardEvents) {
+            setImage(ae, "keyboard-active.png");
+        }else{
+            setImage(ae, "keyboard.png");
+        }
+    }
+
+    @FXML
+    private void setClipboardActive(ActionEvent ae) {
+
+    }
+
+    private Button getSource(ActionEvent ae) {
+        return (Button) ae.getSource();
+    }
+
+    private void setImage(ActionEvent ae, String imageName) {
+        ImageView iv = (ImageView) getSource(ae).getGraphic();
+        final String BASE = "rda/images/";
+        iv.setImage(new Image(BASE + imageName));
+        System.out.println(BASE + imageName);
     }
 }

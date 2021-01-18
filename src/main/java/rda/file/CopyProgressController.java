@@ -2,7 +2,6 @@ package rda.file;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.function.Function;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,7 +15,7 @@ public class CopyProgressController implements Initializable {
     @FXML
     private ProgressBar currentProgress, allProgress;
     @FXML
-    private Label currentLabel, allLabel;
+    private Label currentLabel, allLabel, currentFile;
     @FXML
     private Button btnCancel;
 
@@ -24,11 +23,15 @@ public class CopyProgressController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
     }
+    
+    public void setCurrentFile(String filename){
+        this.currentFile.setText(filename);
+    }
 
     public void setOnCancel(EventHandler<ActionEvent> eh) {
         btnCancel.setOnAction(eh);
     }
-
+    
     public void setCurrentProgress(double d) {
         currentLabel.setText(Math.floor(d * 100) + " %");
         currentProgress.setProgress(d);

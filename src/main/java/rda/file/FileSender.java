@@ -2,11 +2,10 @@ package rda.file;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,12 +26,14 @@ public class FileSender implements Runnable {
         cps = new CopyProgressShower();
     }
 
-    public FileSender(Connection connection, File[] files) throws IOException {
+    public FileSender(Connection connection, List<File> files) throws IOException {
         this.connection = connection;
         this.path = Path.of("/").toString();
         cps = new CopyProgressShower();
-
-        queue.addAll(Arrays.asList(files));
+        for (File f : files) {
+            System.out.println(f.toPath().toString());
+        }
+        queue.addAll(files);
     }
 
     public void send(FilePacket filePacket) throws IOException {
@@ -66,11 +67,17 @@ public class FileSender implements Runnable {
         }
         cps.showAndWait();
         final int total = queue.size();
-        Path basePath = Path.of(path).getParent();
+        Path basePath;
+        if (Path.of(path).equals(Path.of("/"))) {
+            basePath = Path.of(path);
+        } else {
+            basePath = Path.of(path).getParent();
+        }
         int current = 0;
         while (!queue.isEmpty() && !Thread.currentThread().isInterrupted()) {
             current++;
             f = queue.poll();
+            cps.setCurrentFile(f.toPath().toString());
             if (f.isDirectory()) {
                 try {
                     send(new FilePacket(relativePath(basePath, f.toPath()).toString()));
@@ -113,12 +120,12 @@ public class FileSender implements Runnable {
             }
             cps.setAllProgress(current, total);
         }
-
+        cps.close();
     }
 
     private Path relativePath(Path base, Path orginal) {
-        if (orginal.equals(Path.of("/"))) {
-            return Path.of("/");
+        if (base.equals(Path.of("/"))) {
+            return orginal.getFileName();
         }
         String b = base.toString();
         String o = orginal.toString();
