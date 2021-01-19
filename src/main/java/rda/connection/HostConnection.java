@@ -12,20 +12,20 @@ import rda.packet.handler.PacketReceiver;
 import rda.screenshot.ScreenShotSender;
 
 public class HostConnection extends Connection implements Runnable {
-    
+
     private ServerSocket serverSocket;
     private ClipboardEvent ce;
-    
+
     public HostConnection() {
     }
-    
+
     public void start() {
         Thread hostThread = new Thread(this);
         hostThread.setPriority(Thread.MIN_PRIORITY);
         hostThread.start();
-        
+
     }
-    
+
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
@@ -34,7 +34,7 @@ public class HostConnection extends Connection implements Runnable {
         } catch (Exception e) {
         }
     }
-    
+
     @Override
     public void run() {
         try {
@@ -58,11 +58,13 @@ public class HostConnection extends Connection implements Runnable {
             while (!Thread.currentThread().isInterrupted()) {
                 Socket socket = serverSocket.accept();
                 super.initStreams(socket);
+                TrayNotification tray = new TrayNotification(socket.getInetAddress().getHostName(), "Control your computer", Notifications.NOTICE);
+                tray.showAndWait();
                 ScreenShotSender screenShotSender = new ScreenShotSender(this);
                 Thread screenShotThread = new Thread(screenShotSender);
                 screenShotThread.setPriority(Thread.NORM_PRIORITY);
                 screenShotThread.start();
-                
+
                 PacketReceiver packetReceiver = new PacketReceiver(this);
                 Thread packetReceiverThread = new Thread(packetReceiver);
                 packetReceiverThread.setPriority(Thread.NORM_PRIORITY);
@@ -71,12 +73,12 @@ public class HostConnection extends Connection implements Runnable {
                 ce.start();
             }
         } catch (Exception e) {
-            
+
         }
     }
-    
+
     public ClipboardEvent getClipboardEvent() {
         return ce;
     }
-    
+
 }
