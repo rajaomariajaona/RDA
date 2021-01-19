@@ -10,6 +10,7 @@ import rda.packet.handler.PacketReceiver;
 public class GuestConnection extends Connection {
 
     private Socket socket;
+    private ClipboardEvent ce;
 
     public GuestConnection(InetAddress hostAddress) throws Exception {
         socket = new Socket();
@@ -20,10 +21,14 @@ public class GuestConnection extends Connection {
         Thread packetReceiverThread = new Thread(packetReceiver);
         packetReceiverThread.setPriority(Thread.NORM_PRIORITY);
         packetReceiverThread.start();
-        ClipboardEvent ce = new ClipboardEvent(this);
-        ce.startListening();
+        ce = new ClipboardEvent(this);
+        ce.start();
     }
 
+    public ClipboardEvent getClipboardEvent() {
+        return ce;
+    }
+    
     @Override
     protected void finalize() throws Throwable {
         super.finalize();

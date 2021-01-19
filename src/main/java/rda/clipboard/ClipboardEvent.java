@@ -1,34 +1,66 @@
 package rda.clipboard;
 
 import java.awt.Toolkit;
-import java.awt.datatransfer.FlavorEvent;
-import java.awt.datatransfer.FlavorListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import rda.connection.Connection;
+import rda.packet.ClipboardPacket;
 
-public class ClipboardEvent {
-    FlavorListener listener = new FlavorListener() {
-        @Override
-        public void flavorsChanged(FlavorEvent fe) {
-            try {
-                new ClipboardSender(connection).send(ClipboardFactory.createClipboardPacket());
-            } catch (Exception ex) {
-                Logger.getLogger(ClipboardEvent.class.getName()).log(Level.SEVERE, null, ex);
-            }
+public class ClipboardEvent extends Thread implements ClipboardOwner {
+
+    private final Connection connection;
+    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
+    public void setClipboardText(String text) {
+        StringSelection selection = new StringSelection(text);
+        clipboard.setContents(selection, this);
+        System.out.println("CLIPBOARD SET: " + text);
+    }
+
+    @Override
+    public void lostOwnership(Clipboard clpbrd, Transferable t) {
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException ex) {
+            System.out.println(ex.getMessage());
         }
-    };
+        try {
+            regainOwnership(clpbrd.getContents(this));
+            processContents(clpbrd.getContents(this));
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
 
-    private Connection connection;
+    void processContents(Transferable t) throws Exception {
+        System.out.println("Inside processing");
+        if (t.isDataFlavorSupported(DataFlavor.stringFlavor) && null != t.getTransferData(DataFlavor.stringFlavor)) {
+            String clip = (String) t.getTransferData(DataFlavor.stringFlavor);
+            connection.sendPacket(new ClipboardPacket(clip));
+            System.out.println("CLIPBOARD SENT: " + clip);
+        }
+    }
+
+    void regainOwnership(Transferable t) {
+        clipboard.setContents(t, this);
+    }
+
+    public void run() {
+        try {
+            Transferable trans = clipboard.getContents(this);
+            regainOwnership(trans);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println("Listening to board...");
+        while (!Thread.currentThread().isInterrupted()) {
+        }
+    }
 
     public ClipboardEvent(Connection connection) {
         this.connection = connection;
-    }
-    
-    public void startListening(){
-        Toolkit.getDefaultToolkit().getSystemClipboard().addFlavorListener(listener);
-    }
-    public void stopListening(){
-        Toolkit.getDefaultToolkit().getSystemClipboard().removeFlavorListener(listener);
     }
 }

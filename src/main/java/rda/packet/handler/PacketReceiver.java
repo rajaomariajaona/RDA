@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import rda.connection.Connection;
 import rda.event.EventExecutor;
+import rda.packet.ClipboardActivatorPacket;
 import rda.packet.Packet;
 
 public class PacketReceiver implements Runnable {
@@ -16,7 +17,11 @@ public class PacketReceiver implements Runnable {
             initEventExecutor();
             while (!Thread.currentThread().isInterrupted()) {
                 Packet packet = connection.receivePacket();
-                PacketHandler.handle(packet);
+                if (packet instanceof ClipboardActivatorPacket) {
+                    PacketHandler.setClipboardActive(((ClipboardActivatorPacket) packet).getState());
+                } else {
+                    PacketHandler.handle(packet, connection);
+                }
             }
         } catch (IOException ex) {
             Logger.getLogger(PacketReceiver.class.getName()).log(Level.SEVERE, null, ex);

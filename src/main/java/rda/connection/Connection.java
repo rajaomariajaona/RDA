@@ -4,18 +4,25 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import rda.clipboard.ClipboardEvent;
 import rda.packet.Packet;
 
-public class Connection {
+public abstract class Connection {
 
     protected static final int HOST_PORT = 34123;
     private static int counter = 0;
     protected ObjectOutputStream oos;
     protected ObjectInputStream ois;
-
+    private boolean available = false;
+    
     protected void initStreams(Socket socket) throws IOException {
         oos = new ObjectOutputStream(socket.getOutputStream());
         ois = new ObjectInputStream(socket.getInputStream());
+        available = true;
+    }
+    
+    public boolean isAvailable(){
+        return available;
     }
 
     protected void closeStreams() throws IOException {
@@ -27,7 +34,7 @@ public class Connection {
         synchronized (this) {
             oos.writeObject(packet);
             oos.flush();
-            if(++counter > 500){
+            if(++counter > 150){
                 counter = 0;
                 oos.reset();
             }
@@ -48,5 +55,5 @@ public class Connection {
         } catch (Exception ex) {
         }
     }
-
+    public abstract ClipboardEvent getClipboardEvent();
 }

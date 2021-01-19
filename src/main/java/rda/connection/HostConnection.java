@@ -9,11 +9,13 @@ import rda.screenshot.ScreenShotSender;
 public class HostConnection extends Connection implements Runnable {
 
     private ServerSocket serverSocket;
-    
-    public void start(){
+    private ClipboardEvent ce;
+
+    public void start() {
         Thread hostThread = new Thread(this);
         hostThread.setPriority(Thread.MIN_PRIORITY);
         hostThread.start();
+
     }
 
     @Override
@@ -38,13 +40,18 @@ public class HostConnection extends Connection implements Runnable {
         Thread screenShotThread = new Thread(screenShotSender);
         screenShotThread.setPriority(Thread.NORM_PRIORITY);
         screenShotThread.start();
-        
+
         PacketReceiver packetReceiver = new PacketReceiver(this);
         Thread packetReceiverThread = new Thread(packetReceiver);
         packetReceiverThread.setPriority(Thread.NORM_PRIORITY);
         packetReceiverThread.start();
-        ClipboardEvent ce = new ClipboardEvent(this);
-        ce.startListening();
+        ce = new ClipboardEvent(this);
+        ce.start();
     }
+
+    public ClipboardEvent getClipboardEvent() {
+        return ce;
+    }
+    
 
 }

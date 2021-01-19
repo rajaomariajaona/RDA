@@ -47,7 +47,9 @@ import rda.connection.GuestConnection;
 import rda.event.EventPacketFactory;
 import rda.event.EventPacketSender;
 import rda.file.FileSender;
+import rda.packet.ClipboardActivatorPacket;
 import rda.packet.EventPacket;
+import rda.packet.handler.PacketHandler;
 
 /**
  *
@@ -88,6 +90,7 @@ public class MainController implements Initializable {
 
     boolean keyboardEvents = false;
     boolean mouseEvents = false;
+    boolean clipboardEvents = false;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -251,7 +254,7 @@ public class MainController implements Initializable {
     private void sendFile(ActionEvent ae) {
         try {
             FileChooser fileChooser = new FileChooser();
-            
+
             List<File> files = fileChooser.showOpenMultipleDialog((Stage) getSource(ae).getScene().getWindow());
             FileSender fs = new FileSender(connection, files);
             Thread t = new Thread(fs);
@@ -266,9 +269,9 @@ public class MainController implements Initializable {
     private void setFullScreen(ActionEvent ae) {
         Stage s = (Stage) getSource(ae).getScene().getWindow();
         s.setFullScreen(!s.isFullScreen());
-        if(s.isFullScreen()){
+        if (s.isFullScreen()) {
             setImage(ae, "fullscreen-active.png");
-        }else{
+        } else {
             setImage(ae, "fullscreen.png");
         }
     }
@@ -278,7 +281,7 @@ public class MainController implements Initializable {
         mouseEvents = !mouseEvents;
         if (mouseEvents) {
             setImage(ae, "mouse-active.png");
-        }else{
+        } else {
             setImage(ae, "mouse.png");
         }
     }
@@ -288,14 +291,25 @@ public class MainController implements Initializable {
         keyboardEvents = !keyboardEvents;
         if (keyboardEvents) {
             setImage(ae, "keyboard-active.png");
-        }else{
+        } else {
             setImage(ae, "keyboard.png");
         }
     }
 
     @FXML
     private void setClipboardActive(ActionEvent ae) {
-
+        clipboardEvents = !clipboardEvents;
+        PacketHandler.setClipboardActive(clipboardEvents);
+        try {
+            this.connection.sendPacket(new ClipboardActivatorPacket(clipboardEvents));
+        } catch (IOException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (clipboardEvents) {
+            setImage(ae, "clipboard-active.png");
+        } else {
+            setImage(ae, "clipboard.png");
+        }
     }
 
     private Button getSource(ActionEvent ae) {
@@ -306,6 +320,5 @@ public class MainController implements Initializable {
         ImageView iv = (ImageView) getSource(ae).getGraphic();
         final String BASE = "rda/images/";
         iv.setImage(new Image(BASE + imageName));
-        System.out.println(BASE + imageName);
     }
 }
