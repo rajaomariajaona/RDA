@@ -19,68 +19,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rda.MainController">
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rda.MainController">
    <center>
       <StackPane fx:id="parent" focusTraversable="true">
          <children>
-            <StackPane fx:id="imgContainer">
-               <children>
-                  <AnchorPane id="AnchorPane" focusTraversable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: yellow;">
-                     <children>
-                        <ImageView fx:id="imgView" fitHeight="600.0" fitWidth="800.0" focusTraversable="true" layoutX="53.0" layoutY="130.0" onMouseEntered="#handleEvents" onMouseExited="#handleEvents" onMouseMoved="#handleEvents" onMousePressed="#handleEvents" onMouseReleased="#handleEvents" onScroll="#handleEvents" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="50.0" spacing="10.0" style="-fx-background-color: #455a64af; -fx-background-radius: 10px 0 0 10px;" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
-                           <children>
-                              <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#setMouseActive" style="-fx-background-color: transparent;">
-                                 <graphic>
-                                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/mouse.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                              <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#setKeyboardActive" style="-fx-background-color: transparent;">
-                                 <graphic>
-                                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/keyboard.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                              <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#setClipboardActive" style="-fx-background-color: transparent;">
-                                 <graphic>
-                                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/clipboard.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                              <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#sendFile" style="-fx-background-color: transparent;">
-                                 <graphic>
-                                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/send.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                              <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#setFullScreen" style="-fx-background-color: transparent;">
-                                 <graphic>
-                                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/fullscreen.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                           </children>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
-               </children>
-            </StackPane>
             <AnchorPane fx:id="homeContainer" style="-fx-background-color: white;">
                <children>
                   <HBox layoutX="291.0" layoutY="229.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -136,6 +78,64 @@
                   </HBox>
                </children>
             </AnchorPane>
+            <StackPane fx:id="imgContainer">
+               <children>
+                  <AnchorPane id="AnchorPane" focusTraversable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: yellow;">
+                     <children>
+                        <ImageView fx:id="imgView" fitHeight="600.0" fitWidth="800.0" focusTraversable="true" layoutX="53.0" layoutY="130.0" onMouseEntered="#handleEvents" onMouseExited="#handleEvents" onMouseMoved="#handleEvents" onMousePressed="#handleEvents" onMouseReleased="#handleEvents" onScroll="#handleEvents" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="600.0" prefWidth="50.0" spacing="10.0" style="-fx-background-color: #455a64af; -fx-background-radius: 10px 0 0 10px;" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+                           <children>
+                              <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#setMouseActive" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/mouse.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#setKeyboardActive" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/keyboard.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#setClipboardActive" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/clipboard.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#sendFile" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/send.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#setFullScreen" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/fullscreen.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </StackPane>
          </children>
       </StackPane>
    </center>
@@ -153,7 +153,7 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Settings">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#networkSettingAction" text="Network" />
+              <MenuItem mnemonicParsing="false" onAction="#pathSettingAction" text="Copy Path" />
             </items>
           </Menu>
         </menus>

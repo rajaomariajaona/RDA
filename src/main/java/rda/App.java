@@ -22,16 +22,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
+import rda.connection.Connection;
 import rda.connection.HostConnection;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
-    
+
     private static Scene scene;
     public static Stage stage;
-    
+    public static Stage currStage;
+    public static Connection host;
+
     @Override
     public void start(Stage stage) throws IOException {
         Platform.setImplicitExit(false);
@@ -43,22 +46,24 @@ public class App extends Application {
         stage.setResizable(true);
         stage.setTitle("RDA");
         stage.show();
+        currStage = App.stage;
         test();
     }
-    
+
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
-    
+
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
-    
+
     public static void launch(String[] args) {
         OnlyOneApp ooa = new OnlyOneApp();
         if (!ooa.isAppActive()) {
-            new HostConnection().start();
+            host = new HostConnection();
+            ((HostConnection) host).start();
             launch();
         } else {
             final Runnable showDialog = () -> {
@@ -86,7 +91,7 @@ public class App extends Application {
             }
         }
     }
-    
+
     private void test() {
         TrayIcon trayIcon = null;
         if (SystemTray.isSupported()) {
@@ -100,8 +105,8 @@ public class App extends Application {
             ActionListener listener = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Platform.runLater(() -> {
-                        App.stage.show();
-                        App.stage.toFront();
+                        App.currStage.show();
+                        App.currStage.toFront();
                     });
                 }
             };
@@ -109,7 +114,7 @@ public class App extends Application {
             MenuItem lol = new MenuItem("Ouvrir");
             lol.addActionListener(listener);
             popup.add(lol);
-            
+
             MenuItem exit = new MenuItem("Quitter");
             exit.addActionListener((ae) -> {
                 System.exit(0);
@@ -125,8 +130,8 @@ public class App extends Application {
             }
             // ...
         } else {
-            
+
         }
     }
-    
+
 }

@@ -5,11 +5,10 @@ import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import rda.Settings;
 import rda.packet.FilePacket;
 
 public class FileReceiver {
-
-    final static String DEFAULT_PATH = "C:\\Users\\jane\\Desktop\\";
     private static String currentFile;
     private static FileOutputStream fos;
     private static Long currentSize;
@@ -38,7 +37,7 @@ public class FileReceiver {
             } else {
                 currentFile = filePacket.getPath();
                 currentSize = filePacket.getSize();
-                File f = Path.of(DEFAULT_PATH, Path.of(currentFile).toString()).toFile();
+                File f = Path.of(Settings.DEFAULT_PATH, Path.of(currentFile).toString()).toFile();
                 if (filePacket.isDirectory()) {
                     f.mkdirs();
                 } else {

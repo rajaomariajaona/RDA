@@ -17,6 +17,7 @@ public class ClipboardEvent extends Thread implements ClipboardOwner {
     public void setClipboardText(String text) {
         StringSelection selection = new StringSelection(text);
         clipboard.setContents(selection, this);
+        this.setPriority(MIN_PRIORITY);
         System.out.println("CLIPBOARD SET: " + text);
     }
 
@@ -37,13 +38,12 @@ public class ClipboardEvent extends Thread implements ClipboardOwner {
 
     void processContents(Transferable t) throws Exception {
         System.out.println("Inside processing");
-        if (t.isDataFlavorSupported(DataFlavor.stringFlavor) && null != t.getTransferData(DataFlavor.stringFlavor)) {
+        if (t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
             String clip = (String) t.getTransferData(DataFlavor.stringFlavor);
             connection.sendPacket(new ClipboardPacket(clip));
             System.out.println("CLIPBOARD SENT: " + clip);
         }
     }
-
     void regainOwnership(Transferable t) {
         clipboard.setContents(t, this);
     }
@@ -56,8 +56,6 @@ public class ClipboardEvent extends Thread implements ClipboardOwner {
             System.out.println(e.getMessage());
         }
         System.out.println("Listening to board...");
-        while (!Thread.currentThread().isInterrupted()) {
-        }
     }
 
     public ClipboardEvent(Connection connection) {

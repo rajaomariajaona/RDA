@@ -25,7 +25,7 @@ public abstract class Connection {
         return available;
     }
 
-    protected void closeStreams() throws IOException {
+    public void closeStreams() throws IOException {
         oos.close();
         ois.close();
     }
@@ -34,7 +34,7 @@ public abstract class Connection {
         synchronized (this) {
             oos.writeObject(packet);
             oos.flush();
-            if(++counter > 150){
+            if(++counter > 200){
                 counter = 0;
                 oos.reset();
             }

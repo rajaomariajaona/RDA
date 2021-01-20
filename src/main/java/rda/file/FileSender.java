@@ -65,8 +65,9 @@ public class FileSender implements Runnable {
             f = new File(path);
             addFilesToQueue(f);
         }
-        cps.showAndWait();
         final int total = queue.size();
+        cps.setAllProgress(0, total);
+        cps.showAndWait();
         Path basePath;
         if (Path.of(path).equals(Path.of("/"))) {
             basePath = Path.of(path);
@@ -119,6 +120,12 @@ public class FileSender implements Runnable {
                 }
             }
             cps.setAllProgress(current, total);
+        }
+        cps.setAllProgress(total, total);
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(FileSender.class.getName()).log(Level.SEVERE, null, ex);
         }
         cps.close();
     }

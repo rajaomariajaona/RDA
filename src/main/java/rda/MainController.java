@@ -31,6 +31,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -39,6 +40,7 @@ import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -168,11 +170,27 @@ public class MainController implements Initializable {
             }
 
             public void onFailure(Throwable thrown) {
-                showConnectionError();
+                if (thrown.getMessage().contains("LOCALHOST")) {
+                    showLocalhostError();
+                } else {
+                    showConnectionError();
+                }
                 reset();
             }
 
         }, service);
+    }
+
+    private boolean isLocalhost(InetAddress addr) {
+        if (addr.isAnyLocalAddress() || addr.isLoopbackAddress()) {
+            return true;
+        }
+        try {
+            return NetworkInterface.getByInetAddress(addr) != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @FXML
@@ -188,8 +206,10 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void networkSettingAction(ActionEvent ae) {
-
+    private void pathSettingAction(ActionEvent ae) {
+        DirectoryChooser dc = new DirectoryChooser();
+        File f = dc.showDialog(((MenuItem) ae.getSource()).getParentPopup().getScene().getWindow());
+        Settings.setDefaultPath(f.toPath().toString());
     }
 
     private void reset() {
@@ -200,7 +220,21 @@ public class MainController implements Initializable {
     }
 
     private void initConnection() throws Exception {
-        connection = new GuestConnection(InetAddress.getByName(hostAddress.getText()));
+        InetAddress addr = InetAddress.getByName(hostAddress.getText());
+        if (isLocalhost(addr)) {
+            throw new IllegalArgumentException("LOCALHOST Addess");
+        }
+        connection = new GuestConnection(addr);
+        ((GuestConnection) connection).setOnException(new CallbackException() {
+            @Override
+            public void execute() {
+                showConnectionError();
+                Platform.runLater(() -> {
+                    imgContainer.setVisible(false);
+                    imgContainer.toBack();
+                });
+            }
+        });
     }
 
     public static void showImage(BufferedImage image) {
@@ -246,6 +280,14 @@ public class MainController implements Initializable {
         Platform.runLater(() -> {
             Alert a = new Alert(Alert.AlertType.ERROR);
             a.setContentText("Connection aborted");
+            a.show();
+        });
+    }
+
+    private void showLocalhostError() {
+        Platform.runLater(() -> {
+            Alert a = new Alert(Alert.AlertType.ERROR);
+            a.setContentText("Cant connect to localhost");
             a.show();
         });
     }

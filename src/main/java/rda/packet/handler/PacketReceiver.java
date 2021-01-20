@@ -3,6 +3,7 @@ package rda.packet.handler;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import rda.CallbackException;
 import rda.connection.Connection;
 import rda.event.EventExecutor;
 import rda.packet.ClipboardActivatorPacket;
@@ -11,6 +12,7 @@ import rda.packet.Packet;
 public class PacketReceiver implements Runnable {
 
     public Connection connection;
+    private CallbackException ce;
 
     public void run() {
         try {
@@ -23,13 +25,17 @@ public class PacketReceiver implements Runnable {
                     PacketHandler.handle(packet, connection);
                 }
             }
-        } catch (IOException ex) {
-            Logger.getLogger(PacketReceiver.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PacketReceiver.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(PacketReceiver.class.getName()).log(Level.SEVERE, null, ex);
+            if (ce != null) {
+                ce.execute();
+            } else {
+                ex.printStackTrace();
+            }
         }
+    }
+
+    public void setOnException(CallbackException ce) {
+        this.ce = ce;
     }
 
     public PacketReceiver(Connection connection) {

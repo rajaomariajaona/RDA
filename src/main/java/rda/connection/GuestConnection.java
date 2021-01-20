@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import rda.CallbackException;
 import rda.clipboard.ClipboardEvent;
 import rda.packet.handler.PacketReceiver;
 
@@ -11,6 +12,12 @@ public class GuestConnection extends Connection {
 
     private Socket socket;
     private ClipboardEvent ce;
+    private CallbackException callback;
+
+    public void setOnException(CallbackException callback) {
+        this.callback = callback;
+    }
+    
 
     public GuestConnection(InetAddress hostAddress) throws Exception {
         socket = new Socket();
@@ -18,6 +25,7 @@ public class GuestConnection extends Connection {
         socket.connect(sa, 5000);
         super.initStreams(socket);
         PacketReceiver packetReceiver = new PacketReceiver(this);
+        packetReceiver.setOnException(callback);
         Thread packetReceiverThread = new Thread(packetReceiver);
         packetReceiverThread.setPriority(Thread.NORM_PRIORITY);
         packetReceiverThread.start();
