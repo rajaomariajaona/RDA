@@ -29,8 +29,10 @@ public class ClipboardEvent extends Thread implements ClipboardOwner {
             System.out.println(ex.getMessage());
         }
         try {
-            regainOwnership(clpbrd.getContents(this));
-            processContents(clpbrd.getContents(this));
+            Transferable trans = clipboard.getContents(null);
+            Thread.sleep(40);
+            regainOwnership(trans);
+            processContents(trans);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -39,18 +41,24 @@ public class ClipboardEvent extends Thread implements ClipboardOwner {
     void processContents(Transferable t) throws Exception {
         System.out.println("Inside processing");
         if (t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-            String clip = (String) t.getTransferData(DataFlavor.stringFlavor);
-            connection.sendPacket(new ClipboardPacket(clip));
-            System.out.println("CLIPBOARD SENT: " + clip);
+            try {
+                String clip = (String) t.getTransferData(DataFlavor.stringFlavor);
+                connection.sendPacket(new ClipboardPacket(clip));
+                System.out.println("CLIPBOARD SENT: " + clip);
+            } catch (Exception e) {
+                System.out.println("ETO LE ERREUR " + e.getMessage());
+            }
         }
     }
+
     void regainOwnership(Transferable t) {
         clipboard.setContents(t, this);
     }
 
     public void run() {
         try {
-            Transferable trans = clipboard.getContents(this);
+            Transferable trans = clipboard.getContents(null);
+            Thread.sleep(40);
             regainOwnership(trans);
         } catch (Exception e) {
             System.out.println(e.getMessage());

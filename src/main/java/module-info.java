@@ -9,6 +9,7 @@ module rda {
 
     opens rda to javafx.fxml;
     opens rda.file to javafx.fxml;
+    opens  com.github.plushaze.traynotification.notification to javafx.fxml;
     exports rda;
     exports rda.file;
 }

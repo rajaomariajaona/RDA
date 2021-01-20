@@ -13,9 +13,11 @@ public class GuestConnection extends Connection {
     private Socket socket;
     private ClipboardEvent ce;
     private CallbackException callback;
+    private PacketReceiver packetReceiver;
 
     public void setOnException(CallbackException callback) {
         this.callback = callback;
+        packetReceiver.setOnException(callback);
     }
     
 
@@ -24,8 +26,7 @@ public class GuestConnection extends Connection {
         SocketAddress sa = new InetSocketAddress(hostAddress, HOST_PORT);
         socket.connect(sa, 5000);
         super.initStreams(socket);
-        PacketReceiver packetReceiver = new PacketReceiver(this);
-        packetReceiver.setOnException(callback);
+        packetReceiver = new PacketReceiver(this);
         Thread packetReceiverThread = new Thread(packetReceiver);
         packetReceiverThread.setPriority(Thread.NORM_PRIORITY);
         packetReceiverThread.start();

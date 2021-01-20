@@ -230,7 +230,6 @@ public class MainController implements Initializable {
             public void execute() {
                 showConnectionError();
                 Platform.runLater(() -> {
-                    imgContainer.setVisible(false);
                     imgContainer.toBack();
                 });
             }
